@@ -1,6 +1,6 @@
 // Specific definitions for Bionic  -*- C++ -*-
 
-// Copyright (C) 2010-2021 Free Software Foundation, Inc.
+// Copyright (C) 2010-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
@@ -32,5 +32,17 @@
 
 // System-specific #define, typedefs, corrections, etc, go here.  This
 // file will come before all others.
+
+// If _FILE_OFFSET_BITS is 64 and __ANDROID_API__ < 24, there will be
+// errors of undefined fgetpos, fsetpos, fseeko and ftello because their
+// 64 bit versions are only available from Api Level 24 onwards.
+//
+// See https://github.com/android/ndk/issues/480
+//
+// See also
+// https://android.googlesource.com/platform/bionic/+/master/docs/32-bit-abi.md
+#if (_FILE_OFFSET_BITS == 64) && (__ANDROID_API__ < 24)
+#undef _FILE_OFFSET_BITS
+#endif
 
 #endif
